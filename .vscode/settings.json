@@ -2,5 +2,6 @@
      "files.associations": {
          "*.ttml": "xml",
          "*.ttss": "css"
-     }
+    },
+    "dotnet.defaultSolution": "disable"
  }
