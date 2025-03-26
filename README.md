@@ -5,19 +5,19 @@
 - 수업 슬라이드의 git 세팅
 - 우측 상단 Fork를 클릭하고, 그대로 Create Fork 버튼 클릭
 - Fork 받은 리포지토리로 가서, 상단 ``<> Code``를 클릭하고, HTTPS의 링크를 우측 버튼으로 Copy, 다운로드 받을 경로에 가서 터미널에 다음과 같이 입력
-<br>
+
 ```
 git clone https://github.com/(자신의 GitHub 아이디)/team-project-for-2025-spring-swpp-team-04.git
 ```
 - 이제 수업 슬라이드를 참조하여 다음과 같이 ``upstream``을 설정
-<br>
+
 ```
 git remote add upstream https://github.com/SWPP-2025SPRING/team-project-for-2025-spring-swpp-team-04.git
 ```
 - 이제 ``git branch (브랜치 이름)``을 입력하면 신규 브랜치 생성과 함께 해당 브랜치로 checkout됨
 - Unity에서 기능 구현 및 ``commit``
 - 다음 커맨드로 ``main``에 ``merge``하여 ``conflict``가 없으면 코드 통합 완료
-<br>
+
 ```
 git checkout main
 git merge (브랜치 이름)
