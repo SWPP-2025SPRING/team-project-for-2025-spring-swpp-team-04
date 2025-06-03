@@ -1,0 +1,30 @@
+# ============ UNITY GENERATED FILES =============
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+MemoryCaptures/
+UserSettings/
+
+# ============ OS / TOOLING FILES =============
+.DS_Store
+Thumbs.db
+
+# ============ IDE FILES (VS, Rider) =============
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# ============ OTHER ============
+*.bak
+*.old
