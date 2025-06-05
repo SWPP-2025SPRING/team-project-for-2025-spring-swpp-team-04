@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PauseMenuUI : MonoBehaviour
 {
@@ -34,8 +35,9 @@ public class PauseMenuUI : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        ScoreManager.score = 0;
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); // Replace with your main menu scene name
+        StartCoroutine(LoadOptionsWithSoundDelay());
     }
 
     public void QuitGame()
@@ -44,9 +46,22 @@ public class PauseMenuUI : MonoBehaviour
         Debug.Log("Quit Game from Pause Menu.");
     }
 
+    public void GoToNextLevel()
+    {
+        ScoreManager.score = 0;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("S1");
+    }
+
     public void Restart()
     {
+        ScoreManager.score = 0;
         Time.timeScale = 1f; // Make sure time resumes
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private IEnumerator LoadOptionsWithSoundDelay()
+    {
+        yield return new WaitForSeconds(0.2f); // small delay
+        SceneManager.LoadScene("MainMenu");
     }
 }

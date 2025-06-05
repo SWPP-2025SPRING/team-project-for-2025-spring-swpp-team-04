@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LapsManager : MonoBehaviour
 {
     public Text timerText;             // Timer text
-    public Text timeIsUpText;          // Fail text
+    public Text GameOverText;          // Fail text
     public Text winMessageText;        // Success text
     public Text lapTrackText;          // Lap tracker text
     public float startCountdown = 180f;
@@ -14,6 +14,9 @@ public class LapsManager : MonoBehaviour
     private int currentLap = 0;
     public PlayerController_updated playerController;
     public EnemyManagers enemyManager;
+    public GameObject ResultMenuCanvas;
+    public GameObject WinPanel;
+    public GameObject GameOverPanel;
 
 
     private bool isRunning = false;
@@ -22,13 +25,15 @@ public class LapsManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Time.timeScale: " + Time.timeScale);
         countdownTime = startCountdown;
         UpdateTimerDisplay(countdownTime);
 
-        timeIsUpText.gameObject.SetActive(false); // Hide fail text at start
+        GameOverText.gameObject.SetActive(false); // Hide fail text at start
         winMessageText.gameObject.SetActive(false); // Hide success text at start
         currentLap = 0;
         UpdateLapText();
+        Debug.Log("S1 Scene Started");
         //StartTimer(); // Optional: start automatically
     }
 
@@ -42,10 +47,13 @@ public class LapsManager : MonoBehaviour
             {
                 countdownTime = 0f;
                 isRunning = false;
+                ResultMenuCanvas.SetActive(true);
+                GameOverPanel.SetActive(true);
+                WinPanel.SetActive(false); // Hide the other panel
+                GameOverText.gameObject.SetActive(true); // Ensure text object is enabled
+                GameOverText.text = "Game Over";
+                playerController.enabled = false;
                 Debug.Log("타이머 종료!");
-
-                timeIsUpText.gameObject.SetActive(true); // Show "Time is up!"
-                playerController.enabled = false;        // Disable player controls
             }
 
             UpdateTimerDisplay(countdownTime);
@@ -54,7 +62,7 @@ public class LapsManager : MonoBehaviour
 
     void UpdateLapText()
     {
-       lapTrackText.text = $"Lap {currentLap}/{totalLaps}";
+       lapTrackText.text = $"{currentLap}/{totalLaps}";
     }
 
 
@@ -80,8 +88,21 @@ public class LapsManager : MonoBehaviour
         if (!isRunning) return; // Prevent win if time already ran out
 
         isRunning = false;
-        winMessageText.gameObject.SetActive(true);
+        ResultMenuCanvas.SetActive(true);
+        WinPanel.SetActive(true);
+        GameOverPanel.SetActive(false); // Hide the other panel
+        winMessageText.gameObject.SetActive(true); // Ensure text object is enabled
+        winMessageText.text = "You Win!";
         playerController.enabled = false;
+
+        // 🟩 Add leaderboard saving
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        int level = currentScene == "Track_2" ? 1 : 2;
+
+        float time = startCountdown - countdownTime;
+        int score = ScoreManager.score;
+
+        LeaderboardManager.SaveToLeaderboard("Player", time, score, level);
         Debug.Log("You win!");
     }
 
@@ -103,10 +124,7 @@ public class LapsManager : MonoBehaviour
 
         if (currentLap >= totalLaps)
         {
-            isRunning = false;
-            winMessageText.gameObject.SetActive(true);
-            playerController.enabled = false;
-            Debug.Log("You win!");
+            PlayerWins();
         }
         else
         {

@@ -24,6 +24,16 @@ public class PlayerController_updated : MonoBehaviour
     public float jumpForce = 7000f; // 점프 힘
     public float jumpCooldown = 1.5f; // 점프 쿨다운 (초)
 
+    [Header("사운드 설정")]
+    public AudioSource engineAudioSource;
+    public AudioClip engineClip;
+    public AudioClip idleClip; // 차가 멈췄을 때 재생할 오디오
+    public float minPitch = 0.8f;
+    public float maxPitch = 2.0f;
+    public float volumeMultiplier = 1.0f;
+    public float pitchMultiplier = 1.0f;
+    private bool isPlayerActive = false;
+
     // 내부 변수
     private float currentSteerAngle = 0f;
     private float currentMotorTorque = 0f;
@@ -39,6 +49,15 @@ public class PlayerController_updated : MonoBehaviour
         score = 0;
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, centerOfMassHeight, 0);
+
+        if (engineAudioSource != null && engineClip != null)
+        {
+            engineAudioSource.clip = engineClip;
+            engineAudioSource.loop = true;
+            engineAudioSource.volume = 0.5f * volumeMultiplier;
+            engineAudioSource.pitch = minPitch;
+            engineAudioSource.Play();
+        }
     }
 
     private void Update()
@@ -93,6 +112,8 @@ public class PlayerController_updated : MonoBehaviour
             currentSteerAngle = Mathf.Lerp(currentSteerAngle, 0f, Time.fixedDeltaTime * steeringResetSpeed);
         }
 
+        isPlayerActive = Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f || Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f;
+
         // 바퀴에 물리 적용
         ApplyWheelPhysics();
 
@@ -103,6 +124,9 @@ public class PlayerController_updated : MonoBehaviour
         UpdateWheelMeshes();
 
         StabilizeInAir();
+
+        // Update the engine sound
+        UpdateEngineSound();
     }
 
     private void ApplyWheelPhysics()
@@ -220,6 +244,37 @@ public class PlayerController_updated : MonoBehaviour
             // 축 고정
             rb.angularVelocity = Vector3.zero; // 회전 속도 즉시 0으로 설정
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0); // Y축 회전만 유지
+        }
+    }
+
+    private void UpdateEngineSound()
+    {
+        if (engineAudioSource == null) return;
+
+        float speed = rb.velocity.magnitude;
+
+        if (isPlayerActive && speed > 0.5f)
+        {
+            // If the engine clip isn't already playing, switch to it
+            if (engineAudioSource.clip != engineClip)
+            {
+                engineAudioSource.clip = engineClip;
+                engineAudioSource.pitch = minPitch;
+                engineAudioSource.Play();
+            }
+
+            engineAudioSource.pitch = Mathf.Clamp(minPitch + speed * 0.05f * pitchMultiplier, minPitch, maxPitch);
+        }
+        else
+        {
+            // If the idle clip isn't already playing, switch to it
+            if (engineAudioSource.clip != idleClip && idleClip != null)
+            {
+                engineAudioSource.clip = idleClip;
+                engineAudioSource.pitch = 1.0f; // Neutral pitch for idle
+                engineAudioSource.loop = true;
+                engineAudioSource.Play();
+            }
         }
     }
 }

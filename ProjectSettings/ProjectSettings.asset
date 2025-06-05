@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 24
-  productGUID: bcf1e379aa9a24dd8aafc86d93b27160
+  productGUID: 2c079489d519e4078b623c6da25ecf53
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: swpp_project_2
+  productName: TrialCarsUpdate
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -721,11 +721,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 24511867-b9ac-48c8-a6f5-e88dd24627de
+  cloudProjectId: 03e2225d-f65d-43b7-a813-cad20fdd28e1
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: swpp_project_2
-  organizationId: jiwonkim531
+  projectName: TrialCarsUpdate
+  organizationId: rizkysaputra01
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
