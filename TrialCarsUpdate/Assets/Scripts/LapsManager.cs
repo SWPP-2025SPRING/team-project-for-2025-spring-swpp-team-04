@@ -12,16 +12,20 @@ public class LapsManager : MonoBehaviour
     public float startCountdown = 180f;
     public int totalLaps = 3;
     private int currentLap = 0;
+    private float totalElapsedTime = 0f;   // Time for leaderboard puposes
     public PlayerController_updated playerController;
     public EnemyManagers enemyManager;
     public GameObject ResultMenuCanvas;
     public GameObject WinPanel;
     public GameObject GameOverPanel;
+    public InputField playerNameInput;
 
 
     private bool isRunning = false;
     private float countdownTime;
     public bool hasPassedCheckpoint = false;
+    private bool hasSavedScore = false;
+
 
     void Start()
     {
@@ -42,6 +46,7 @@ public class LapsManager : MonoBehaviour
         if (isRunning)
         {
             countdownTime -= Time.deltaTime;
+            totalElapsedTime += Time.deltaTime;
 
             if (countdownTime <= 0f)
             {
@@ -95,15 +100,8 @@ public class LapsManager : MonoBehaviour
         winMessageText.text = "You Win!";
         playerController.enabled = false;
 
-        // 🟩 Add leaderboard saving
-        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        int level = currentScene == "Track_2" ? 1 : 2;
-
-        float time = startCountdown - countdownTime;
-        int score = ScoreManager.score;
-
-        LeaderboardManager.SaveToLeaderboard("Player", time, score, level);
-        Debug.Log("You win!");
+        // Show player name input & submit button here
+        playerNameInput.gameObject.SetActive(true);
     }
 
     public void ResetTimer()
@@ -132,6 +130,43 @@ public class LapsManager : MonoBehaviour
             enemyManager?.ResetAllEnemies(); // Reset enemies when new lap starts
             Debug.Log($"Lap {currentLap} completed!");
         }
+    }
+
+    public void OnSubmitName()
+    {
+      if (hasSavedScore)
+      {
+          Debug.Log("Score already saved, ignoring further submissions.");
+          return;  // Ignore multiple submits
+      }
+
+        string playerName = playerNameInput.text;
+        if (string.IsNullOrWhiteSpace(playerName))
+            playerName = "Player";
+
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        //int level = currentScene == "Track_2" ? 1 : 2;
+        Dictionary<string, int> levelSceneMap = new Dictionary<string, int>()
+        {
+            { "Track_2", 1 },
+            { "S1", 2 },
+            // Add more level scenes here
+        };
+        int level;
+        if (!levelSceneMap.TryGetValue(currentScene, out level))
+        {
+            Debug.LogWarning($"Scene '{currentScene}' is not a gameplay level. Leaderboard not saved.");
+            return;
+        }
+
+
+        float time = totalElapsedTime;
+        int score = ScoreManager.currentHP;
+
+        LeaderboardManager.SaveToLeaderboard(playerName, time, score, level);
+        Debug.Log("Score saved to leaderboard for: " + playerName);
+
+        hasSavedScore = true;  // Mark as saved
     }
 
 }
