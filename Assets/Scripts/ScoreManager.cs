@@ -73,7 +73,7 @@ public class ScoreManager : MonoBehaviour
     void UpdateHPUI()
     {
         if (hpText != null)
-            hpText.text = "HP: " + currentHP;
+            hpText.text = "" + currentHP;
     }
 
     void Die()
