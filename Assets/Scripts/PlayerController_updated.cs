@@ -24,6 +24,14 @@ public class PlayerController_updated : MonoBehaviour
     public float jumpForce = 7000f; // 점프 힘
     public float jumpCooldown = 1.5f; // 점프 쿨다운 (초)
 
+    [Header("Booster Settings")]
+    public float boostForce = 3000f;
+    public float boostDuration = 1f;
+
+    private bool isBoosting = false;
+    private float boostStartTime = -10f;
+    private bool hasSlowedDown = false;
+
     [Header("사운드 설정")]
     public AudioSource engineAudioSource;
     public AudioClip engineClip;
@@ -67,6 +75,23 @@ public class PlayerController_updated : MonoBehaviour
         {
             TryJump();
         }
+
+        // 부스터 키 입력
+        if (Input.GetKeyDown(KeyCode.X) && !isBoosting)
+        {
+            rb.AddForce(transform.forward * boostForce, ForceMode.Impulse);
+            boostStartTime = Time.time;
+            isBoosting = true;
+            hasSlowedDown = false;
+        }
+
+        // 감속 타이밍 체크
+        if (isBoosting && !hasSlowedDown && Time.time - boostStartTime >= boostDuration)
+        {
+            rb.AddForce(-transform.forward * boostForce, ForceMode.Impulse);
+            hasSlowedDown = true;
+            isBoosting = false; // 한 번에 끝나므로 여기서 종료
+        }
     }
 
     private void FixedUpdate()
@@ -74,6 +99,7 @@ public class PlayerController_updated : MonoBehaviour
         // 입력 처리
         float verticalInput = Input.GetAxis("Vertical");
         float horizontalInput = Input.GetAxis("Horizontal");
+
 
         // 모터 토크 계산 (가속/감속)
         currentMotorTorque = verticalInput * motorForce * inputSensitivity;
@@ -175,6 +201,7 @@ public class PlayerController_updated : MonoBehaviour
         mesh.position = position;
         mesh.rotation = rotation;
     }
+
 
     // 점프 시도 메서드
     private void TryJump()
