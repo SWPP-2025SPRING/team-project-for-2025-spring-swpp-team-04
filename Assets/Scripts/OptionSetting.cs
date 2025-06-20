@@ -1,6 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class OptionSetting : MonoBehaviour
 {
@@ -16,9 +17,14 @@ public class OptionSetting : MonoBehaviour
     public AudioSource mainMenuMusic;
     public Slider volumeSlider;
 
+    [Header("Car Selection")]
+    public Dropdown carDropdown;
+    public string[] carNames;
+
     void Start()
     {
         SetupResolutionDropdown();
+        SetupCarDropdown();
         SetupBrightnessSlider();
         SetupVolumeSlider();
     }
@@ -66,6 +72,30 @@ public class OptionSetting : MonoBehaviour
 
         Debug.Log("Resolution changed to: " + resolution.width + "x" + resolution.height);
     }
+
+    // --- Car Setup ---
+    void SetupCarDropdown()
+    {
+        carDropdown.ClearOptions();
+        List<string> options = new List<string>(carNames);
+        carDropdown.AddOptions(options);
+
+        // 이전에 선택한 값 불러오기
+        int savedCarIndex = PlayerPrefs.GetInt("SelectedCarIndex", 0);
+        carDropdown.value = savedCarIndex;
+        carDropdown.RefreshShownValue();
+
+        carDropdown.onValueChanged.AddListener(SetCar);
+    }
+
+    public void SetCar(int index)
+    {
+        PlayerPrefs.SetInt("SelectedCarIndex", index);
+        PlayerPrefs.Save();
+        Debug.Log($"Car Selected: {carNames[index]}");
+    }
+
+
 
     // --- Brightness Setup ---
     void SetupBrightnessSlider()
