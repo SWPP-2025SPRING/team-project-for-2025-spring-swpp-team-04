@@ -510,7 +510,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1325212035}
         m_TargetAssemblyTypeName: AudioManagerUI, Assembly-CSharp
         m_MethodName: PlayClick
         m_Mode: 1
@@ -2047,9 +2047,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 893614433}
         m_TargetAssemblyTypeName: PauseMenuUI, Assembly-CSharp
-        m_MethodName: Restart
+        m_MethodName: LoadMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2059,7 +2059,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1325212035}
         m_TargetAssemblyTypeName: AudioManagerUI, Assembly-CSharp
         m_MethodName: PlayClick
         m_Mode: 1
@@ -5965,7 +5965,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1325212035}
         m_TargetAssemblyTypeName: AudioManagerUI, Assembly-CSharp
         m_MethodName: PlayClick
         m_Mode: 1
@@ -7364,7 +7364,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 893614433}
         m_TargetAssemblyTypeName: PauseMenuUI, Assembly-CSharp
         m_MethodName: LoadMainMenu
         m_Mode: 1
@@ -7376,7 +7376,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1325212035}
         m_TargetAssemblyTypeName: AudioManagerUI, Assembly-CSharp
         m_MethodName: PlayClick
         m_Mode: 1
