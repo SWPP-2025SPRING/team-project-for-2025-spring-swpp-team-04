@@ -25,12 +25,12 @@ public class PlayerController_updated : MonoBehaviour
     public float jumpCooldown = 1.5f; // 점프 쿨다운 (초)
 
     [Header("Booster Settings")]
-    public float boostForce = 3000f;
+    public float boostForce = 8000f;
     public float boostDuration = 1f;
 
     private bool isBoosting = false;
     private float boostStartTime = -10f;
-    private bool hasSlowedDown = false;
+
 
     [Header("사운드 설정")]
     public AudioSource engineAudioSource;
@@ -80,17 +80,13 @@ public class PlayerController_updated : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X) && !isBoosting)
         {
             rb.AddForce(transform.forward * boostForce, ForceMode.Impulse);
-            boostStartTime = Time.time;
             isBoosting = true;
-            hasSlowedDown = false;
+            boostStartTime = Time.time;
         }
 
-        // 감속 타이밍 체크
-        if (isBoosting && !hasSlowedDown && Time.time - boostStartTime >= boostDuration)
+        if (isBoosting && Time.time - boostStartTime > boostDuration)
         {
-            rb.AddForce(-transform.forward * boostForce, ForceMode.Impulse);
-            hasSlowedDown = true;
-            isBoosting = false; // 한 번에 끝나므로 여기서 종료
+            isBoosting = false;
         }
     }
 
@@ -108,10 +104,11 @@ public class PlayerController_updated : MonoBehaviour
         currentBrakeTorque = 0f;
         if (verticalInput < 0 && rb.velocity.magnitude > 1f && Vector3.Dot(rb.velocity, transform.forward) > 0)
         {
-            currentBrakeTorque = brakeForce;
+            float speedFactor = Mathf.Clamp(rb.velocity.magnitude / 20f, 1f, 10f); // 속도 비례 강화
+            currentBrakeTorque = brakeForce * speedFactor;
             currentMotorTorque = 0f;
         }
-        // 전진 입력이 들어오면 브레이크 즉시 해제 (해결 방법 2)
+        // 전진 입력이 들어오면 브레이크 즉시 해제
         else if (verticalInput > 0)
         {
             currentBrakeTorque = 0f;
